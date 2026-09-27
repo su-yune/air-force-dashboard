@@ -1,163 +1,511 @@
-<div class="dashboard-shell" *ngIf="dashboardData">
-  <div class="page-title">
-    <h1>{{ dashboardData.title }}</h1>
-    <h2>{{ dashboardData.subtitle }}</h2>
-  </div>
+<div class="app-shell">
+  <header class="topbar">
+    <div class="brand-area">
+      <div class="brand-icon">✦</div>
 
-  <!-- EXECUTIVE SUMMARY SECTION -->
-  <div class="section executive">
-    <div class="section-header">EXECUTIVE SUMMARY</div>
-    <table class="summary-table">
-      <tr>
-        <td>NAF Average Score:</td>
-        <td>{{ dashboardData.executiveSummary.nafAverageScore }}%</td>
-      </tr>
-      <tr>
-        <td>NAF Overall Rating:</td>
-        <td>{{ dashboardData.executiveSummary.nafOverallRating }}</td>
-      </tr>
-      <tr>
-        <td>Best Performing Theatre</td>
-        <td>{{ dashboardData.executiveSummary.bestPerformingTheatre }}</td>
-      </tr>
-      <tr>
-        <td>Theatre Needing Attention</td>
-        <td>{{ dashboardData.executiveSummary.theatreNeedingAttention }}</td>
-      </tr>
-      <tr>
-        <td>Threats Above Target</td>
-        <td>{{ dashboardData.executiveSummary.threatsAboveTarget }}</td>
-      </tr>
-      <tr>
-        <td>Threats Below Target</td>
-        <td>{{ dashboardData.executiveSummary.threatsBelowTarget }}</td>
-      </tr>
-    </table>
-  </div>
-
-  <!-- DIMENSION PERFORMANCE SECTION -->
-  <div class="section dimension-section">
-    <div class="table-section-header">DIMENSION PERFORMANCE ACROSS ALL THEATRES</div>
-    <table class="dimension-table">
-      <thead>
-        <tr>
-          <th>DIMENSION</th>
-          <th>NAF AVG</th>
-          <th>BEST</th>
-          <th>BEST THEATRE</th>
-          <th>LOWEST</th>
-          <th>THEATRE</th>
-          <th>STD DEV</th>
-          <th>STATUS</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let row of dashboardData.dimensionPerformance">
-          <td class="dim-name">{{ row.dimension }}</td>
-          <td>{{ row.nafAvg }}%</td>
-          <td>{{ row.best }}</td>
-          <td>{{ row.bestTheatre }}</td>
-          <td>{{ row.lowest }}</td>
-          <td>{{ row.lowestTheatre }}</td>
-          <td>{{ row.stdDev }}%</td>
-          <td>
-            <span [ngClass]="{
-              'status-warning': row.status === 'Needs Action',
-              'status-ok': row.status === 'On Track',
-              'status-risk': row.status === 'At Risk'
-            }">
-              {{ row.status }}
-            </span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <!-- THEATRE SUMMARY SECTION -->
-  <div class="section theatre-section">
-    <div class="table-section-header">THEATRE SUMMARY</div>
-    <table class="theatre-table">
-      <thead>
-        <tr>
-          <th>THEATRE</th>
-          <th>REGION</th>
-          <th>SCORE</th>
-          <th>RATING</th>
-          <th>RANK</th>
-          <th>TREND</th>
-          <th>PRIORITY AREA</th>
-          <th>ACTION</th>
-          <th>URGENCY</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let t of dashboardData.theatreSummary" 
-            class="theatre-row clickable"
-            (click)="selectTheatre(t)"
-            [class.selected]="selectedTheatre?.theatre === t.theatre">
-          <td class="theatre-name">{{ t.theatre }}</td>
-          <td>{{ t.region }}</td>
-          <td>{{ t.score }}%</td>
-          <td>{{ t.rating }}</td>
-          <td>{{ t.rank }}</td>
-          <td>{{ t.trend }}</td>
-          <td>{{ t.priorityArea }}</td>
-          <td>{{ t.action }}</td>
-          <td>{{ t.urgency }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <!-- THEATRE DETAILS MODAL/PANEL -->
-  <div class="theatre-details-panel" *ngIf="selectedTheatre" @slideIn>
-    <div class="details-header">
-      <h3>{{ selectedTheatre.theatre }} - Details</h3>
-      <button class="close-btn" (click)="closeTheatreDetails()">✕</button>
-    </div>
-
-    <div class="details-content">
-      <div class="details-grid">
-        <div class="detail-item">
-          <span class="detail-label">Theatre:</span>
-          <span class="detail-value">{{ selectedTheatre.theatre }}</span>
-        </div>
-        <div class="detail-item">
-          <span class="detail-label">Region:</span>
-          <span class="detail-value">{{ selectedTheatre.region }}</span>
-        </div>
-        <div class="detail-item">
-          <span class="detail-label">Score:</span>
-          <span class="detail-value">{{ selectedTheatre.score }}%</span>
-        </div>
-        <div class="detail-item">
-          <span class="detail-label">Rating:</span>
-          <span class="detail-value">{{ selectedTheatre.rating }}</span>
-        </div>
-        <div class="detail-item">
-          <span class="detail-label">Rank:</span>
-          <span class="detail-value">{{ selectedTheatre.rank }}</span>
-        </div>
-        <div class="detail-item">
-          <span class="detail-label">Trend:</span>
-          <span class="detail-value">{{ selectedTheatre.trend }}</span>
-        </div>
-        <div class="detail-item">
-          <span class="detail-label">Priority Area:</span>
-          <span class="detail-value">{{ selectedTheatre.priorityArea }}</span>
-        </div>
-        <div class="detail-item">
-          <span class="detail-label">Action Required:</span>
-          <span class="detail-value">{{ selectedTheatre.action }}</span>
-        </div>
-        <div class="detail-item">
-          <span class="detail-label">Urgency:</span>
-          <span class="detail-value urgency" [ngClass]="selectedTheatre.urgency.toLowerCase()">
-            {{ selectedTheatre.urgency }}
-          </span>
-        </div>
+      <div>
+        <div class="brand-title">AIR STAFF & POLICY COMMAND</div>
+        <div class="brand-subtitle">CAS & COPP EXECUTIVE PORTAL</div>
       </div>
     </div>
+
+    <div class="topbar-actions">
+      <div class="time-block">
+        <strong>{{ 'now' | date:'HH:mm:ss' }}</strong>
+        <span>LOCAL TIME</span>
+      </div>
+
+      <button class="icon-button" type="button" title="Toggle theme">
+        ◐
+      </button>
+
+      <button class="logout-button" type="button">
+        ⇥ <span>EXIT</span>
+      </button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-label">MAIN MENU</div>
+
+      <button
+        type="button"
+        class="menu-item"
+        [class.active]="activeMenu === 'Dashboard'"
+        (click)="selectMenu('Dashboard')"
+      >
+        <span>▦</span>
+        <span>Dashboard</span>
+      </button>
+
+      <button
+        type="button"
+        class="menu-item"
+        [class.active]="activeMenu === 'KPI Performance'"
+        (click)="selectMenu('KPI Performance')"
+      >
+        <span>▥</span>
+        <span>KPI Performance</span>
+      </button>
+
+      <button
+        type="button"
+        class="menu-item"
+        [class.active]="activeMenu === 'Reports'"
+        (click)="selectMenu('Reports')"
+      >
+        <span>▤</span>
+        <span>Reports</span>
+      </button>
+
+      <button
+        type="button"
+        class="menu-item"
+        [class.active]="activeMenu === 'Settings'"
+        (click)="selectMenu('Settings')"
+      >
+        <span>⚙</span>
+        <span>Settings</span>
+      </button>
+
+      <div class="sidebar-footer">
+        <div class="secure-badge">✓</div>
+        <div>
+          <strong>Secure Portal</strong>
+          <small>Session protected</small>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <div class="content-heading">
+        <div>
+          <div class="breadcrumb">HEADQUARTERS / {{ activeMenu | uppercase }}</div>
+          <h1>Executive Dashboard</h1>
+          <p>Office of the Chief of the Air Staff & Chief of Policy & Plans</p>
+        </div>
+
+        <button class="export-button" type="button">
+          ⇩ Export Report
+        </button>
+      </div>
+
+      <!-- MONTH COMPARISON SECTION -->
+      <section class="month-comparison">
+        <div
+          class="month-card current"
+          [class.active]="selectedTimeframe === 'current'"
+          (click)="selectedTimeframe = 'current'"
+        >
+          <span class="month-label">CURRENT MONTH</span>
+          <strong class="month-date">{{ currentMonth }}</strong>
+          <small>01 - 31 Oct 2026</small>
+        </div>
+
+        <div
+          class="month-card previous"
+          [class.active]="selectedTimeframe === 'previous'"
+          (click)="selectedTimeframe = 'previous'"
+        >
+          <span class="month-label">PREVIOUS MONTH</span>
+          <strong class="month-date">{{ previousMonth }}</strong>
+          <small>01 - 30 Sep 2026</small>
+        </div>
+      </section>
+
+      <!-- PERFORMANCE HIGHLIGHTS -->
+      <section class="highlights-section">
+        <h2>Theatre Performance Highlights</h2>
+
+        <div class="highlights-grid">
+          <button
+            type="button"
+            class="theatre-highlight-card best"
+            (click)="openBestPerformingTheatre()"
+          >
+            <div class="highlight-icon">★</div>
+            <div class="highlight-content">
+              <span>BEST PERFORMING</span>
+              <strong>{{ summary.bestPerformingTheatre }}</strong>
+              <small>Click to investigate performance →</small>
+            </div>
+          </button>
+
+          <button
+            type="button"
+            class="theatre-highlight-card attention"
+            (click)="openNeedingAttentionTheatre()"
+          >
+            <div class="highlight-icon">⚠</div>
+            <div class="highlight-content">
+              <span>NEEDS ATTENTION</span>
+              <strong>{{ summary.theatreNeedingAttention }}</strong>
+              <small>Click to investigate causes →</small>
+            </div>
+          </button>
+        </div>
+      </section>
+
+      <section class="metric-grid">
+        <article class="metric-card blue">
+          <div class="metric-icon">◈</div>
+          <div>
+            <span>NAF AVERAGE SCORE</span>
+            <strong>{{ summary.nafAverageScore }}%</strong>
+            <small>Current reporting period</small>
+          </div>
+        </article>
+
+        <article class="metric-card red">
+          <div class="metric-icon">!</div>
+          <div>
+            <span>OVERALL RATING</span>
+            <strong>{{ summary.nafOverallRating }}</strong>
+            <small>Requires immediate attention</small>
+          </div>
+        </article>
+
+        <article class="metric-card green">
+          <div class="metric-icon">★</div>
+          <div>
+            <span>BEST PERFORMING THEATRE</span>
+            <strong>{{ summary.bestPerformingTheatre }}</strong>
+            <small>Highest current ranking</small>
+          </div>
+        </article>
+
+        <article class="metric-card amber">
+          <div class="metric-icon">⚠</div>
+          <div>
+            <span>THEATRES BELOW TARGET</span>
+            <strong>{{ summary.threatsBelowTarget }}</strong>
+            <small>{{ summary.threatsAboveTarget }} above target</small>
+          </div>
+        </article>
+      </section>
+
+      <section class="panel">
+        <div class="panel-heading">
+          <div>
+            <h2>Dimension Performance</h2>
+            <p>Performance across all theatres</p>
+          </div>
+
+          <span class="period-label">Q2 2026</span>
+        </div>
+
+        <div class="table-wrapper">
+          <table class="professional-table dimension-table">
+            <thead>
+              <tr>
+                <th>DIMENSION</th>
+                <th>NAF AVG</th>
+                <th>BEST</th>
+                <th>BEST THEATRE</th>
+                <th>LOWEST</th>
+                <th>LOWEST THEATRE</th>
+                <th>STD DEV</th>
+                <th>STATUS</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let row of dimensions">
+                <td class="strong-cell">{{ row.dimension }}</td>
+                <td>{{ row.nafAvg }}%</td>
+                <td>{{ row.best }}</td>
+                <td>{{ row.bestTheatre }}</td>
+                <td>{{ row.lowest }}</td>
+                <td>{{ row.lowestTheatre }}</td>
+                <td>{{ row.stdDev }}%</td>
+                <td>
+                  <span class="status-badge" [class]="getStatusClass(row.status)">
+                    {{ row.status }}
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-heading">
+          <div>
+            <h2>Theatre Summary</h2>
+            <p>Select a theatre to view detailed performance information</p>
+          </div>
+
+          <span class="record-count">
+            {{ filteredTheatres.length }} theatres
+          </span>
+        </div>
+
+        <div class="toolbar">
+          <div class="search-box">
+            <span>⌕</span>
+            <input
+              type="search"
+              placeholder="Search theatre or region..."
+              [(ngModel)]="searchTerm"
+            />
+          </div>
+
+          <select [(ngModel)]="selectedRegion">
+            <option *ngFor="let region of regions" [value]="region">
+              {{ region }}
+            </option>
+          </select>
+
+          <button
+            type="button"
+            class="clear-button"
+            (click)="clearFilters()"
+          >
+            Clear
+          </button>
+        </div>
+
+        <div class="table-wrapper">
+          <table class="professional-table theatre-table">
+            <thead>
+              <tr>
+                <th>THEATRE</th>
+                <th>REGION</th>
+                <th>SCORE</th>
+                <th>RATING</th>
+                <th>RANK</th>
+                <th>TREND</th>
+                <th>PRIORITY AREA</th>
+                <th>ACTION</th>
+                <th>URGENCY</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr
+                *ngFor="let theatre of filteredTheatres"
+                class="clickable-row"
+                (click)="openDetails(theatre)"
+              >
+                <td class="strong-cell">
+                  {{ theatre.theatre }}
+                  <span class="view-hint">View details →</span>
+                </td>
+                <td>{{ theatre.region }}</td>
+                <td>{{ theatre.score }}%</td>
+                <td>{{ theatre.rating }}</td>
+                <td>
+                  <span class="rank-badge">{{ theatre.rank }}</span>
+                </td>
+                <td class="trend-cell">{{ theatre.trend }}</td>
+                <td>{{ theatre.priorityArea }}</td>
+                <td>{{ theatre.action }}</td>
+                <td>
+                  <span class="urgency-badge" [class]="getUrgencyClass(theatre.urgency)">
+                    {{ theatre.urgency }}
+                  </span>
+                </td>
+              </tr>
+
+              <tr *ngIf="filteredTheatres.length === 0">
+                <td colspan="9" class="empty-state">
+                  No theatre matches your search.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <footer class="page-footer">
+        <span>© 2026 Headquarters Nigerian Air Force</span>
+        <span>Last updated: Today</span>
+      </footer>
+    </main>
+  </div>
+
+  <!-- QUICK DETAILS MODAL -->
+  <div
+    class="modal-backdrop"
+    *ngIf="showDetails && selectedTheatre"
+    (click)="closeDetails()"
+  >
+    <section
+      class="details-modal"
+      role="dialog"
+      aria-modal="true"
+      (click)="$event.stopPropagation()"
+    >
+      <div class="modal-header">
+        <div>
+          <span class="modal-label">THEATRE PERFORMANCE DETAILS</span>
+          <h2>{{ selectedTheatre.theatre }}</h2>
+          <p>{{ selectedTheatre.region }}</p>
+        </div>
+
+        <button
+          type="button"
+          class="modal-close"
+          aria-label="Close details"
+          (click)="closeDetails()"
+        >
+          ×
+        </button>
+      </div>
+
+      <div class="modal-score">
+        <div>
+          <span>Current score</span>
+          <strong>{{ selectedTheatre.score }}%</strong>
+        </div>
+
+        <span class="urgency-badge" [class]="getUrgencyClass(selectedTheatre.urgency)">
+          {{ selectedTheatre.urgency }}
+        </span>
+      </div>
+
+      <div class="detail-grid">
+        <div class="detail-box">
+          <span>Rating</span>
+          <strong>{{ selectedTheatre.rating }}</strong>
+        </div>
+
+        <div class="detail-box">
+          <span>Rank</span>
+          <strong>#{{ selectedTheatre.rank }}</strong>
+        </div>
+
+        <div class="detail-box">
+          <span>Trend</span>
+          <strong>{{ selectedTheatre.trend }}</strong>
+        </div>
+
+        <div class="detail-box">
+          <span>Action</span>
+          <strong>{{ selectedTheatre.action }}</strong>
+        </div>
+      </div>
+
+      <div class="priority-box">
+        <span>Priority area</span>
+        <strong>{{ selectedTheatre.priorityArea }}</strong>
+        <p>
+          This area requires review and follow-up during the current reporting
+          period.
+        </p>
+      </div>
+
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="modal-action investigation-link"
+          (click)="openDetailedAnalysis(selectedTheatre.theatre)"
+        >
+          View Detailed Investigation →
+        </button>
+
+        <button type="button" class="modal-action close-modal" (click)="closeDetails()">
+          Close
+        </button>
+      </div>
+    </section>
+  </div>
+
+  <!-- DETAILED INVESTIGATION MODAL -->
+  <div
+    class="modal-backdrop"
+    *ngIf="showDetailedAnalysis && selectedDetailTheatre"
+    (click)="closeDetailedAnalysis()"
+  >
+    <section
+      class="details-modal investigation-modal"
+      (click)="$event.stopPropagation()"
+    >
+      <div class="modal-header investigation-header">
+        <div>
+          <span class="modal-label">DETAILED PERFORMANCE INVESTIGATION</span>
+          <h2>{{ selectedDetailTheatre.theatre }}</h2>
+          <p>{{ selectedDetailTheatre.region }}</p>
+        </div>
+
+        <button
+          type="button"
+          class="modal-close"
+          (click)="closeDetailedAnalysis()"
+        >
+          ×
+        </button>
+      </div>
+
+      <div class="investigation-content">
+        <div class="analysis-summary">
+          <span class="analysis-label">Performance Analysis</span>
+          <p>{{ selectedDetailTheatre.analysis }}</p>
+        </div>
+
+        <div class="history-section">
+          <h3>Monthly Performance History</h3>
+
+          <div class="history-grid">
+            <div
+              class="history-card"
+              *ngFor="let record of selectedDetailTheatre.history"
+            >
+              <span class="history-month">{{ record.month }}</span>
+              <strong class="history-score">{{ record.score }}%</strong>
+              <small class="history-rating">{{ record.rating }}</small>
+              <b
+                class="history-trend"
+                [ngClass]="{
+                  'trend-up': record.trend.includes('↑'),
+                  'trend-down': record.trend.includes('↓'),
+                  'trend-flat': !record.trend.includes('↑') && !record.trend.includes('↓')
+                }"
+              >
+                {{ record.trend }}
+              </b>
+            </div>
+          </div>
+        </div>
+
+        <div class="investigation-columns">
+          <div class="investigation-column challenges-column">
+            <h3>Identified Challenges</h3>
+
+            <ul class="challenge-list">
+              <li *ngFor="let challenge of selectedDetailTheatre.challenges">
+                <span class="challenge-icon">⚠</span>
+                {{ challenge }}
+              </li>
+            </ul>
+          </div>
+
+          <div class="investigation-column recommendations-column">
+            <h3>Recommended Actions</h3>
+
+            <ul class="recommendation-list">
+              <li
+                *ngFor="let recommendation of selectedDetailTheatre.recommendations"
+              >
+                <span class="action-icon">✓</span>
+                {{ recommendation }}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="investigation-footer">
+        <button
+          type="button"
+          class="modal-action"
+          (click)="closeDetailedAnalysis()"
+        >
+          Close Investigation
+        </button>
+      </div>
+    </section>
   </div>
 </div>
