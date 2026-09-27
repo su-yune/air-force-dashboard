@@ -1,0 +1,163 @@
+<div class="dashboard-shell" *ngIf="dashboardData">
+  <div class="page-title">
+    <h1>{{ dashboardData.title }}</h1>
+    <h2>{{ dashboardData.subtitle }}</h2>
+  </div>
+
+  <!-- EXECUTIVE SUMMARY SECTION -->
+  <div class="section executive">
+    <div class="section-header">EXECUTIVE SUMMARY</div>
+    <table class="summary-table">
+      <tr>
+        <td>NAF Average Score:</td>
+        <td>{{ dashboardData.executiveSummary.nafAverageScore }}%</td>
+      </tr>
+      <tr>
+        <td>NAF Overall Rating:</td>
+        <td>{{ dashboardData.executiveSummary.nafOverallRating }}</td>
+      </tr>
+      <tr>
+        <td>Best Performing Theatre</td>
+        <td>{{ dashboardData.executiveSummary.bestPerformingTheatre }}</td>
+      </tr>
+      <tr>
+        <td>Theatre Needing Attention</td>
+        <td>{{ dashboardData.executiveSummary.theatreNeedingAttention }}</td>
+      </tr>
+      <tr>
+        <td>Threats Above Target</td>
+        <td>{{ dashboardData.executiveSummary.threatsAboveTarget }}</td>
+      </tr>
+      <tr>
+        <td>Threats Below Target</td>
+        <td>{{ dashboardData.executiveSummary.threatsBelowTarget }}</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- DIMENSION PERFORMANCE SECTION -->
+  <div class="section dimension-section">
+    <div class="table-section-header">DIMENSION PERFORMANCE ACROSS ALL THEATRES</div>
+    <table class="dimension-table">
+      <thead>
+        <tr>
+          <th>DIMENSION</th>
+          <th>NAF AVG</th>
+          <th>BEST</th>
+          <th>BEST THEATRE</th>
+          <th>LOWEST</th>
+          <th>THEATRE</th>
+          <th>STD DEV</th>
+          <th>STATUS</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of dashboardData.dimensionPerformance">
+          <td class="dim-name">{{ row.dimension }}</td>
+          <td>{{ row.nafAvg }}%</td>
+          <td>{{ row.best }}</td>
+          <td>{{ row.bestTheatre }}</td>
+          <td>{{ row.lowest }}</td>
+          <td>{{ row.lowestTheatre }}</td>
+          <td>{{ row.stdDev }}%</td>
+          <td>
+            <span [ngClass]="{
+              'status-warning': row.status === 'Needs Action',
+              'status-ok': row.status === 'On Track',
+              'status-risk': row.status === 'At Risk'
+            }">
+              {{ row.status }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- THEATRE SUMMARY SECTION -->
+  <div class="section theatre-section">
+    <div class="table-section-header">THEATRE SUMMARY</div>
+    <table class="theatre-table">
+      <thead>
+        <tr>
+          <th>THEATRE</th>
+          <th>REGION</th>
+          <th>SCORE</th>
+          <th>RATING</th>
+          <th>RANK</th>
+          <th>TREND</th>
+          <th>PRIORITY AREA</th>
+          <th>ACTION</th>
+          <th>URGENCY</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let t of dashboardData.theatreSummary" 
+            class="theatre-row clickable"
+            (click)="selectTheatre(t)"
+            [class.selected]="selectedTheatre?.theatre === t.theatre">
+          <td class="theatre-name">{{ t.theatre }}</td>
+          <td>{{ t.region }}</td>
+          <td>{{ t.score }}%</td>
+          <td>{{ t.rating }}</td>
+          <td>{{ t.rank }}</td>
+          <td>{{ t.trend }}</td>
+          <td>{{ t.priorityArea }}</td>
+          <td>{{ t.action }}</td>
+          <td>{{ t.urgency }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- THEATRE DETAILS MODAL/PANEL -->
+  <div class="theatre-details-panel" *ngIf="selectedTheatre" @slideIn>
+    <div class="details-header">
+      <h3>{{ selectedTheatre.theatre }} - Details</h3>
+      <button class="close-btn" (click)="closeTheatreDetails()">✕</button>
+    </div>
+
+    <div class="details-content">
+      <div class="details-grid">
+        <div class="detail-item">
+          <span class="detail-label">Theatre:</span>
+          <span class="detail-value">{{ selectedTheatre.theatre }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Region:</span>
+          <span class="detail-value">{{ selectedTheatre.region }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Score:</span>
+          <span class="detail-value">{{ selectedTheatre.score }}%</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Rating:</span>
+          <span class="detail-value">{{ selectedTheatre.rating }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Rank:</span>
+          <span class="detail-value">{{ selectedTheatre.rank }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Trend:</span>
+          <span class="detail-value">{{ selectedTheatre.trend }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Priority Area:</span>
+          <span class="detail-value">{{ selectedTheatre.priorityArea }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Action Required:</span>
+          <span class="detail-value">{{ selectedTheatre.action }}</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-label">Urgency:</span>
+          <span class="detail-value urgency" [ngClass]="selectedTheatre.urgency.toLowerCase()">
+            {{ selectedTheatre.urgency }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
